@@ -32,6 +32,9 @@ Una suite di protocolli Internet, in informatica e in telecomunicazioni, indica 
 ### TCP
 In telecomunicazioni e informatica il Transmission Control Protocol (TCP), anche chiamato Transfer Control Protocol, e' un protocollo di rete a pacchetto di livello di trasporto, appartenente alla suite di protocolli Internet, che si occupa di controllo di trasmissione ovvero rendere affidabile la comunicazione dati in rete tra mittente e destinatario.
 #### Caratteristiche principali
+ * Item 1
+ * Item 2
+  * Item 2.1
 &nbsp;&nbsp;&nbsp;&nbsp;1. TCP e' un protocollo orientato alla connessione, ovvero prima di poter trasmettere dati deve stabilire la comunicazione, negoziando una connessione tra mittente e destinatario, che rimane attiva anche in assenza di scambio di dati e viene esplicitamente chiusa quando non piu' necessaria. Esso quindi possiede le funzionalita' per creare, mantenere e chiudere/abbattere una connessione.
 &nbsp;&nbsp;&nbsp;&nbsp;2. TCP e' un protocollo affidabile: garantisce la consegna dei segmenti a destinazione attraverso il meccanismo degli acknowledgements.
 &nbsp;&nbsp;&nbsp;&nbsp;3. Il servizio offerto da TCP e' il trasporto di un flusso di byte bidirezionale tra due applicazioni in esecuzione su host differenti. Il protocollo permette alle due applicazioni di trasmettere contemporaneamente nelle due direzioni, quindi il servizio puo' essere considerato "Full-duplex" anche se non tutti i protocolli applicativi basati su TCP utilizzano questa possibilita'.
