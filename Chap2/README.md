@@ -45,11 +45,9 @@ In telecomunicazioni e informatica il Transmission Control Protocol (TCP), anche
 In telecomunicazioni lo User Datagram Protocol (UDP) e' uno dei principali protocolli di trasporto della suite di protocolli Internet. E' un protocollo di livello di trasporto a pacchetto, usato di solito in combinazione con il protocollo di livello di rete IP.
 A differenza del TCP, l'UDP e' un protocollo di tipo connectionless, inoltre non gestisce il riordinamento dei pacchetti ne' la ritrasmissione di quelli persi, ed e' perciò generalmente considerato di minore affidabilita'. In compenso e' molto rapido (non c'e' latenza per riordino e ritrasmissione) ed efficiente per le applicazioni "leggere" o time-sensitive. Ad esempio, e' usato spesso per la trasmissione di informazioni audio-video real-time come nel caso delle trasmissioni Voip.
 Infatti, visto che le applicazioni in tempo reale richiedono spesso un bit-rate minimo di trasmissione, non vogliono ritardare eccessivamente la trasmissione dei pacchetti e possono tollerare qualche perdita di dati, il modello di servizio TCP puo' non essere particolarmente adatto alle loro caratteristiche.
-
 L'UDP fornisce soltanto i servizi basilari del livello di trasporto, ovvero:
  * multiplazione delle connessioni, ottenuta attraverso il meccanismo di assegnazione delle porte;
  * verifica degli errori (integrità dei dati) mediante una checksum, inserita in un campo dell'intestazione (header) del pacchetto, mentre TCP garantisce anche il trasferimento affidabile dei dati, il controllo di flusso e il controllo della congestione.
-
 L'UDP e' un protocollo stateless, ovvero non tiene nota dello stato della connessione dunque ha, rispetto al TCP, meno informazioni da memorizzare: un server dedicato ad una particolare applicazione che scelga UDP come protocollo di trasporto puo' supportare quindi molti piu' client attivi.
 
 ### UDP vs TCP
@@ -60,18 +58,53 @@ Le principali differenze tra TCP e UDP (User Datagram Protocol), l'altro princip
 L'utilizzo del protocollo TCP rispetto a UDP e', in generale, preferito quando e' necessario avere garanzie sulla consegna dei dati o sull'ordine di arrivo dei vari segmenti (come per esempio nel caso di trasferimenti di file). Al contrario UDP viene principalmente usato quando l'interazione tra i due host e' idempotente o nel caso si abbiano forti vincoli sulla velocita' e l'economia di risorse della rete (es. streaming).
 
 ### Netcat
+Netcat e' un programma open source a riga di comando di comunicazione remota, utilizzabile sia col protocollo TCP sia col protocollo UDP.
+Netcat e' stato pensato per essere utilizzato facilmente da altri programmi o scripts. Allo stesso tempo puo' essere uno strumento utilissimo per l'amministrazione di rete e di investigazione.
+Nel 2000 Netcat fu votata da www.insecure.org come il secondo migliore programma per la sicurezza informatica. Anche nel 2003 e nel 2006 raggiunse il quarto posto per la stessa categoria. Netcat viene spesso chiamato come "il coltellino svizzero delle reti TCP/IP". Puo' essere utilizzato per moltissime funzioni: eseguire una scansione sulle porte di un computer remoto o ascoltare in locale, trasferire file, essere usato come una chat o persino per la creazione di una backdoor.
 
 ### Proxy
+In informatica e telecomunicazioni, un server proxy e' un server (inteso come sistema informatico o applicazione) che funge da intermediario per le richieste da parte dei client alla ricerca di risorse su altri server, disaccoppiando l'accesso al web dal browser. Un client si connette al server proxy, richiedendo qualche servizio (ad esempio un file, una pagina web o qualsiasi altra risorsa disponibile su un altro server), e quest'ultimo valuta ed esegue la richiesta in modo da semplificare e gestire la sua complessità. I proxy sono stati inventati per aggiungere struttura e incapsulamento ai sistemi distribuiti.
+Ad oggi, i server proxy vengono utilizzati per svariati impieghi come:
+ * Fornire l'anonimato durante la navigazione internet (es. sistema TOR)
+ * Memorizzare una copia locale degli oggetti web richiesti in modo da poterli fornire nuovamente senza effettuare altri accessi ai server di destinazione (HTTP caching proxy)
+ * Creare una "barriera di difesa" (Firewall) verso il web, agendo da filtro per le connessioni entranti ed uscenti e monitorando, controllando e modificando il traffico interno
 
 ### TCP Proxy
+Il proxy TCP e' un processo proxy che pu' essere avviato in uno stream TCP, come ad esempio una connessione HTTP tra il vostro browser e un server. It filters the request and response streams, sending the results to the terminal window (stdout). You can control its behaviour by specifying different filters.
 
 ### Paramiko
+Paramiko e' un'implementazione Python (2.6+, 3.3+) del protocollo SSHv2, che fornisce  funzionalita' sia lato client che server. Utilizza una estensione Python C per gestire la crittografia a basso livello, e fornisce una completa interfaccia Python per operazioni SSH di rete.
 
 ### SSH
+In informatica e telecomunicazioni SSH (Secure SHell, shell sicura) e' un protocollo che permette di stabilire una sessione remota cifrata tramite interfaccia a riga di comando con un altro host di una rete informatica. E' il protocollo che ha sostituito l'analogo, ma insicuro, Telnet.
+Il client SSH ha un'interfaccia a riga di comando simile a quella di telnet e rlogin, ma l'intera comunicazione (ovvero sia l'autenticazione - mutua - che la sessione di lavoro) avviene in maniera cifrata. Per questo motivo, SSH e' diventato uno standard di fatto per l'amministrazione remota di sistemi UNIX e di dispositivi di rete, rendendo obsoleto il protocollo telnet, giudicato troppo pericoloso per la sua mancanza di protezione contro le intercettazioni.
+Il client ed il server SSH sono installati o installabili su molte versioni di UNIX, GNU/Linux, macOS e Microsoft Windows. Inoltre e' disponibile come strumento di amministrazione su alcuni apparati di rete. La IANA (Internet Assigned Numbers Authority) ha assegnato al servizio SSH la porta 22 TCP e UDP, anche se e' comunque possibile implementare il servizio SSH su altre porte non definite dalla IANA.
 
-### SSH Reverse
+### Tunneling
+Nelle reti di calcolatori, il termine tunneling si riferisce a un insieme di tecniche di trasmissione dati per cui un protocollo viene incapsulato in un altro protocollo per realizzare configurazioni particolari ovvero inserire funzionalità protocollari aggiuntive di elaborazione non presenti nel protocollo iniziale, ma presenti in altri protocolli.
+Nelle configurazioni normali, un protocollo viene incapsulato in un altro protocollo di livello inferiore. Ad esempio, IP viene incapsulato in ethernet.
+ * Un insieme importante delle tecniche di tunneling sono quelle usate per realizzare VPN, in cui IP viene incapsulato in IP, TCP o UDP, inserendo uno strato di crittografia. In queste tecniche, due reti IP, o due parti della stessa rete IP, entrambe connesse ad Internet, vengono interconnesse facendo passare il traffico all'interno di una connessione che viene trasmessa su Internet.
+ * La funzionalita' di port forwarding di SSH consente di inoltrare connessioni TCP tra host arbitrari all'interno di una connessione SSH, che a sua volta viaggia su TCP. In questo modo si riesce facilmente a proteggere un protocollo applicativo insicuro per farlo transitare su una rete non fidata, oppure ad aggirare limitazioni realizzate attraverso firewall o configurazioni di routing che non permetterebbero a due host di comunicare direttamente.
+ * L'utilizzo di protocolli di livello di rete per trasportare IP, che a sua volta e' un protocollo di livello rete, e' a sua volta una forma di tunneling. L'esempio tipico e' la connessione di due reti IP attraverso una galleria ATM: in tal caso, il pacchetto IP viene inserito (e opportunamente frammentato) all'interno del campo dati della cella ATM, trasmesso attraverso la rete e quindi spacchettato e ricomposto all'arrivo. In questo modo, gli switch ATM non si renderanno conto di cosa stanno trasmettendo, perche' il campo dati e' trasmesso così com'è, senza dover essere interpretato. Ai capi della galleria e' necessario inserire router multiprotocollo, che siano in grado di compiere le operazioni di impacchettamento dei dati.
+ * Per trasportare il protocollo IPv6 all'interno di IPv4, o viceversa, si usano delle gallerie. Un insieme di tecniche di tunneling sono state previste per gestire la transizione da IPv4 a IPv6.
+
 
 ### SSH Tunneling
+Quando si e' connessi da una rete pubblica o non sicura, per proteggere la vostra privacy e quella dei vostri clienti.
+Ci sono svariate ragioni per cui si dovrebbe scegliere di utilizzare un tunnel sicuro, ma la principale e' ovviamente la sicurezza. Utilizzare un tunnel cifrato ti mette al sicuro dalla possibilita' che la comunicazione venga intercettata nella rete in cui transita. Questo e' particolarmente utile se si e' connessi tramite wifi, reti pubbliche, aziendali, e in generale da reti non sicure dove terzi potrebbero sniffare il contenuto delle connessioni. Usando un tunnel cifrato ben configurato ed utilizzando chiavi firmate e' anche possibile rendere piu' difficili gli attacchi MITM (Man In The Middle).
+Esistono poi protocolli non sicuri che e' meglio veicolare in una connessione cifrata appena possibile.
+Ad esempio, si supponga di avere un server remoto con un database SQL che accetta solo connessioni da localhost. Supponiamo anche di voler effettuare manutenzione e query senza usare un'interfaccia web come phpMyadmin, ed usare invece un bel client locale. Come fare? Di certo non e' cosa intelligente aprire il database a chiunque, d’altro canto siccome il server accetta solo connessioni locali sembrerebbe impossibile ottenere il risultato sperato.
+La soluzione e' il tunneling ssh della connessione al database. Infatti e' possibile incapsulare la connessione al database in una SSH verso l’host che poi la reindirizza localmente alla porta del server di database, e cosi' facendo si ottengono 2 vantaggi :
+ * L’host remoto non deve accettare connessioni SQL da terzi
+ * La nostra connessione e' sicura e cifrata fino all’host di destinazione
+Ricapitolando, mediante il tunneling ssh e' possibile proteggere e cifrare una connessione dal pc su cui lavoriamo fino ad un host che riteniamo sicuro. Oltre alla sicurezza, un’altra ragione per voler utilizzare un tunnel ssh e' la possibilita' di eludere regole di routing restrittive e firewall che incitano alla violenza. Infatti e' possibile incapsulare tutto il proprio traffico HTTP, FTP o connessioni di altro tipo, in un tunnel che attraversa la rete con regole restrittive fino ad un host fidato in una rete di cui si ha il controllo (ad esempio il proprio pc di casa, o una VPS in un datacenter fidato). Su quell’host il traffico lascia il tunnel e viene rispedito come se l’origine fosse l’host stesso.
+In questa maniera si puo' attraversare la rete insicura o con restrizioni mediante una singola connessione cifrata, una volta raggiunto l’host fidato il traffico sarà reindirizzato verso le destinazioni volute, e le risposte saranno convogliate attraverso il tunnel fino alla vostra posizione.
+
+### SSH Reverse
+SSH reverse tunneling permette di collegarsi ad un server remoto (dotato di servizio ssh) e dirgli di inviare/inoltrare tutte le connessioni TCP ricevute su una porta, ad un altro host in rete.
+Vediamo un esempio per rendere l’idea.
+Ammettiamo di avere un computer collegato dietro una NAT, ad esempio come accade per i clienti Fastweb. Questo computer avra' quindi un IP privato e non potra' quindi ricevere connessioni in ingresso da Internet.
+Ammettiamo pero' di avere anche accesso SSH ad un server esterno alla rete Fastweb, dotato di normale indirizzo IP pubblico, ed in grado di ricevere connessioni in ingresso da Internet.
 
 --
 
