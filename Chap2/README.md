@@ -33,12 +33,19 @@ Una suite di protocolli Internet, in informatica e in telecomunicazioni, indica 
 In telecomunicazioni e informatica il Transmission Control Protocol (TCP), anche chiamato Transfer Control Protocol, e' un protocollo di rete a pacchetto di livello di trasporto, appartenente alla suite di protocolli Internet, che si occupa di controllo di trasmissione ovvero rendere affidabile la comunicazione dati in rete tra mittente e destinatario.
 #### Caratteristiche principali
 &nbsp;&nbsp;&nbsp;&nbsp;1. TCP e' un protocollo orientato alla connessione, ovvero prima di poter trasmettere dati deve stabilire la comunicazione, negoziando una connessione tra mittente e destinatario, che rimane attiva anche in assenza di scambio di dati e viene esplicitamente chiusa quando non piu' necessaria. Esso quindi possiede le funzionalita' per creare, mantenere e chiudere/abbattere una connessione.
+
 &nbsp;&nbsp;&nbsp;&nbsp;2. TCP e' un protocollo affidabile: garantisce la consegna dei segmenti a destinazione attraverso il meccanismo degli acknowledgements.
+
 &nbsp;&nbsp;&nbsp;&nbsp;3. Il servizio offerto da TCP e' il trasporto di un flusso di byte bidirezionale tra due applicazioni in esecuzione su host differenti. Il protocollo permette alle due applicazioni di trasmettere contemporaneamente nelle due direzioni, quindi il servizio puo' essere considerato "Full-duplex" anche se non tutti i protocolli applicativi basati su TCP utilizzano questa possibilita'.
+
 &nbsp;&nbsp;&nbsp;&nbsp;4. Il flusso di byte viene frazionato in blocchi per la trasmissione dall'applicazione a TCP (che normalmente e' implementato all'interno del sistema operativo), per la trasmissione all'interno di segmenti TCP, per la consegna all'applicazione che lo riceve, ma questa divisione in blocchi non e' necessariamente la stessa nei diversi passaggi.
+
 &nbsp;&nbsp;&nbsp;&nbsp;5. TCP garantisce che i dati trasmessi, se giungono a destinazione, lo facciano in ordine e una volta sola ("at most once"). Piu' formalmente, il protocollo fornisce ai livelli superiori un servizio equivalente ad una connessione fisica diretta che trasporta un flusso di byte. Questo e' realizzato attraverso vari meccanismi di acknowledgment e di ritrasmissione su timeout.
+
 &nbsp;&nbsp;&nbsp;&nbsp;6. TCP offre funzionalita' di controllo di errore sui pacchetti pervenuti grazie al campo checksum contenuto nella sua PDU.
+
 &nbsp;&nbsp;&nbsp;&nbsp;7. TCP possiede funzionalita' di controllo di flusso tra terminali in comunicazione e controllo della congestione sulla connessione, attraverso il meccanismo della finestra scorrevole. Questo permette di ottimizzare l'utilizzo dei buffer di ricezione/invio sui due end devices (controllo di flusso) e di diminuire il numero di segmenti inviati in caso di congestione della rete.
+
 &nbsp;&nbsp;&nbsp;&nbsp;8. TCP fornisce un servizio di multiplazione delle connessioni su un host, attraverso il meccanismo delle porte.
 
 
