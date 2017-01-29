@@ -42,8 +42,22 @@ In telecomunicazioni e informatica il Transmission Control Protocol (TCP), anche
  * TCP fornisce un servizio di multiplazione delle connessioni su un host, attraverso il meccanismo delle porte.
 
 ### UDP
+In telecomunicazioni lo User Datagram Protocol (UDP) e' uno dei principali protocolli di trasporto della suite di protocolli Internet. E' un protocollo di livello di trasporto a pacchetto, usato di solito in combinazione con il protocollo di livello di rete IP.
+A differenza del TCP, l'UDP e' un protocollo di tipo connectionless, inoltre non gestisce il riordinamento dei pacchetti ne' la ritrasmissione di quelli persi, ed e' perciò generalmente considerato di minore affidabilita'. In compenso e' molto rapido (non c'e' latenza per riordino e ritrasmissione) ed efficiente per le applicazioni "leggere" o time-sensitive. Ad esempio, e' usato spesso per la trasmissione di informazioni audio-video real-time come nel caso delle trasmissioni Voip.
+Infatti, visto che le applicazioni in tempo reale richiedono spesso un bit-rate minimo di trasmissione, non vogliono ritardare eccessivamente la trasmissione dei pacchetti e possono tollerare qualche perdita di dati, il modello di servizio TCP puo' non essere particolarmente adatto alle loro caratteristiche.
+
+L'UDP fornisce soltanto i servizi basilari del livello di trasporto, ovvero:
+ * multiplazione delle connessioni, ottenuta attraverso il meccanismo di assegnazione delle porte;
+ * verifica degli errori (integrità dei dati) mediante una checksum, inserita in un campo dell'intestazione (header) del pacchetto, mentre TCP garantisce anche il trasferimento affidabile dei dati, il controllo di flusso e il controllo della congestione.
+
+L'UDP e' un protocollo stateless, ovvero non tiene nota dello stato della connessione dunque ha, rispetto al TCP, meno informazioni da memorizzare: un server dedicato ad una particolare applicazione che scelga UDP come protocollo di trasporto puo' supportare quindi molti piu' client attivi.
 
 ### UDP vs TCP
+Le principali differenze tra TCP e UDP (User Datagram Protocol), l'altro principale protocollo di trasporto della suite di protocolli Internet, sono:
+ * TCP e' un protocollo orientato alla connessione. Pertanto, per stabilire, mantenere e chiudere una connessione, e' necessario inviare pacchetti di servizio i quali aumentano l'overhead di comunicazione. Al contrario, UDP e' senza connessione ed invia solo i datagrammi richiesti dal livello applicativo;
+ * UDP non offre nessuna garanzia sull'affidabilità della comunicazione ovvero sull'effettivo arrivo dei segmenti, sul loro ordine in sequenza in arrivo; al contrario il TCP tramite i meccanismi di acknowledgement e di ritrasmissione su timeout riesce a garantire la consegna dei dati, anche se al costo di un maggiore overhead (raffrontabile visivamente confrontando la dimensione delle intestazioni dei due protocolli);
+ * l'oggetto della comunicazione di TCP e' il flusso di byte mentre quello di UDP e' il singolo datagramma.
+L'utilizzo del protocollo TCP rispetto a UDP e', in generale, preferito quando e' necessario avere garanzie sulla consegna dei dati o sull'ordine di arrivo dei vari segmenti (come per esempio nel caso di trasferimenti di file). Al contrario UDP viene principalmente usato quando l'interazione tra i due host e' idempotente o nel caso si abbiano forti vincoli sulla velocita' e l'economia di risorse della rete (es. streaming).
 
 ### Netcat
 
