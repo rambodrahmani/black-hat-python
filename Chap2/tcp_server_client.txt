@@ -1,0 +1,15 @@
+Per utilizzare tcp_server e tcp_client, avviare tcp_server con python tcp_server.py.
+A questo punto il primo output sulla schermata terminale del tcp_server sara':
+
+[*] Listening on 0.0.0.0:9999
+
+Dopo di che avviare il tcp_client con python tcp_clien.py.
+Il tcp_server stampera'
+
+[*] Accepted connection from 127.0.0.1:36724
+[*] Received: GET / HTTP/1.1
+Host: www.google.com
+
+Mentre il tcp_client, prima di terminare, stampera'
+
+ACK!

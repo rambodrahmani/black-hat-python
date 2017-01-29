@@ -16,3 +16,7 @@ def convert_integer(number_string):
 	return converted_integer
 
 answer = sum("1", "2")
+
+# ho aggiunto una istruzione print affinche' il programma mostri qualcosa
+# al termine dell'esecuzione.
+print answer
