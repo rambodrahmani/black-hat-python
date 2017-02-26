@@ -1,13 +1,34 @@
 # bhp_ssh.py
 
+# Un dei metodi per proteggere con crittografia il traffico
+# delle vostre comunicazioni con host remoti e' quello ti
+# utilizzare l'SSH (Secure Shell). Tuttavia, com pensate di fare
+# nel caso in cui il vostro host obbiettivo non ha un client SSH
+# (come ad esempio il 99.8 per cento dei sistemi Windows)?
+# Potete in questi casi utilizzare il python per creare un client
+# SSH o server. Paramiko, utilizzando PyCrypto vi fornisce accesso
+# semplificato al protocollo SSH2.
+
+# Prima di procedere dovete installare paramiko utilizzando l'installer
+# pip con il seguente comando da linea di comando:
+# $ pip install paramiko
+
+# -----------------------------
+# Esempio di utilizzo:
+# $ python bhp_ssh.py 127.0.0.1 rambodrahmani password ls
+# -----------------------------
+
 import sys
 import threading
 import paramiko
 import subprocess
 
+# Il programma che segue e' abbastanza semplice.
+# Viene creata una unica funzione che si connette al Server SSH specificato
+# ed esegue un singolo comando.
 def ssh_command(ip, user, passwd, command):
 	client = paramiko.SSHClient()
-	# notice that paramiko supports authentication with keys
+	# Paramiko supporta l'autenticazione anche con l'utilizzo di chiavi SSH
 	# client.load_host_keys('/home/justin/.ssh/known_hosts')
 	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	client.connect(ip, username = user, password = passwd)
@@ -20,7 +41,9 @@ def ssh_command(ip, user, passwd, command):
 
 	return
 
-# prints usage arguments and examples
+# Il codice sorgente seguente e' stato modificato rispetto
+# a quello originario per implementare funzioni non previste
+# dal libro.
 def usage():
 	print("Usage python bhp_ssh.py [ip] [user] [password] [command]")
 	print("Example python bhp_ssh.py 192.168.1.1 justin lovethepython id")
@@ -28,6 +51,7 @@ def usage():
 # edited to pass ssh connection paramters using command line arguments
 #
 # *** Python sys.argv ***
+# -----------------------
 # to make it easier to read, let's just shorten this to:
 #
 # C:\> hello.py John

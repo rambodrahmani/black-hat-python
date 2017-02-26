@@ -1,6 +1,7 @@
 # tcp_serer.py
 
-# Creare Server TCP in python e' semplice tanto quanto la creazione del client TCP che abbiamo gia' visto in tcp_client.py.
+# Creare Server TCP in python e' semplice tanto quanto la
+# creazione del client TCP che abbiamo gia' visto in tcp_client.py.
 
 # Per utilizzare tcp_client.py e tcp_server.py utilizzare i seguenti comandi su terminare:
 
@@ -29,27 +30,33 @@ bind_port = 9999
 # Creazione di un Socket.
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Definizione dell'indirizzo IP e della porta su cui eseguire il Server.
+# Definizione dell'indirizzo IP e della porta su cui eseguire
+# il Server.
 server.bind((bind_ip, bind_port))
 
-# Inizio ricezione delle connessioni da parte dei Clients con un backlog di 5.
+# Inizio ricezione delle connessioni da parte dei Clients
+# con un backlog di 5.
 server.listen(5)
 
-# Server avviato: viene stampato l'indirizzo IP e la porta su cui il Server si trova in ascolto.
+# Server avviato: viene stampato l'indirizzo IP e la porta
+# su cui il Server si trova in ascolto.
 print("[*] Listening on %s:%d" % (bind_ip, bind_port))
 
-# La funzione che si occupa di gestire le connessioni in arriva dei Clients esegue una semplice ricezione e invio del messaggio "ACK!".
+# La funzione che si occupa di gestire le connessioni in
+# arriva dei Clients esegue una semplice ricezione e invio del messaggio "ACK!".
 def handle_client(client_socket):
-	# print out what the client sends
+	# Stampa del messaggio ricevuto dal Client.
 	request = client_socket.recv(1024)
 	print("[*] Received: %s" % request)
 
-	# send back a packet
+	# Invio di un pacchetto al Client contenente il messaggio "ACK!"
 	client_socket.send("ACK!")
 
 	client_socket.close()
 
-# A questo punto il Server entra nel suo ciclo while principale. Quando un client si connette riceviamo il socket in una variabile di nome client e i dettaggli relativi alla connessione remote vengono salvati in addr. In seguito viene creato un oggetto thread collegato alla funzione handle_client.
+# A questo punto il Server entra nel suo ciclo while principale. Quando
+# un client si connette riceviamo il socket in una variabile di nome
+# client e i dettaggli relativi alla connessione remote vengono salvati in addr. In seguito viene creato un oggetto thread collegato alla funzione handle_client.
 while True:
 	client, addr = server.accept()
 
