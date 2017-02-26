@@ -14,7 +14,7 @@ Ci sono una serie di concetti che credo debbano essere approfonditi prima di pot
 I  protocolli  definiscono  formato  e ordine  dei  messaggi  spediti  e ricevuti tra entita' della rete, e le azioni  da  compiere  in  seguito  alla ricezione  e/o  trasmissione  dei messaggi o di altri eventi.
 Quindi un protocollo determina come due entita' debbano comunicare, proprio come le regole della grammatica della lingua italiana parlata.
 
-[INSERIRE IMMAGINE PROTOCOLLO]
+<img src="imgs/Protocollo.png" alt="Rapresentazione Protocollo" width="400px"/>
 
 In particolare un protocollo prevede la definizione dei linguaggi costituiti dai messaggi scambiati, messaggi che devono potersi interpretare correttamente. L'aderenza ai protocolli garantisce che due software in esecuzione su diverse macchine possano comunicare efficacemente, anche se sono stati realizzati indipendentemente cioè interoperabilita'.
 In senso piu' lato, un protocollo di comunicazione si puo' definire come un insieme di regole che vengono stabilite per instaurare una comunicazione corretta: ad esempio due persone di differenti madrelingue potrebbero mettersi d'accordo nell'utilizzo della lingua inglese per comunicare.
