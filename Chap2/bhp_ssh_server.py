@@ -5,8 +5,8 @@ import socket
 import paramiko
 import threading
 
-# using the key from the Paramiko demo files
-
+# Utilizzeremo la chiave di autenticazione fornita da paramiko
+# per avviare velocemente il nostro Server SSH.
 host_key = paramiko.RSAKey(filename='paramiko/demos/test_rsa.key')
 
 class Server (paramiko.ServerInterface):
@@ -19,13 +19,16 @@ class Server (paramiko.ServerInterface):
 		return paramiko.OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED
 
 	def check_auth_password(self, username, password):
-		if (username == "reverse") and (password == "Fr33d0mF1ght3r93"):
+		if (username == "rambodrahmani") and (password == "password"):
 			return paramiko.AUTH_SUCCESSFUL
 		return paramiko.AUTH_FAILED
 
 server = sys.argv[1]
 ssh_port = int(sys.argv[2])
 
+# Proprio come abbiamo fatto con gli esempi precedenti, la prima parte
+# da avviare e' il socket che rimane in ascolto per le connessioni
+# in entrata.
 try:
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -40,6 +43,7 @@ except Exception, e:
 	sys.exit(1)
 
 print("[+] Got a connection.")
+
 
 try:
 	bhSession = paramiko.Transport(client)
